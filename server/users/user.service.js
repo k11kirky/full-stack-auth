@@ -40,6 +40,11 @@ async function signUp({ nickname, email, password }) {
     }
     // do validation
     let hashedEmail = md5(email)
+    
+    const user = users.find(u => u.id === hashedEmail);
+    if (user) {
+        throw("Already used this email address")
+    }
     // Generate test SMTP service account from ethereal.email
     const account = await nodemailer.createTestAccount();
 
