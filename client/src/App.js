@@ -109,7 +109,7 @@ class App extends Component {
           <h1>{user ? `Welcome ${user.nickname}` : "Please Log In"}</h1>
           <hr />
           {user ?
-            (<button onClick={this.openModal}>Log Out</button>)
+            null
             : (<button onClick={this.openModal}>Log In</button>)}
         </header>
       </div>

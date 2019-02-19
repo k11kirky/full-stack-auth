@@ -27,7 +27,7 @@ Clone the project
 
 Go into the client dir and run yarn
 
- ### `cd client && yarn`
+ ### `cd client & yarn`
 
 To start the app use
 
@@ -35,7 +35,7 @@ To start the app use
 
 From root do the same for the server
 
- ### `cd ../server && yarn`
+ ### `cd ../server & yarn`
 
 To start the app use
 

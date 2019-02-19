@@ -17,7 +17,7 @@ async function login({ email, password }) {
     if (user) {
         if (!user.verifed) {
             return ({
-                message: "user not verifed",
+                message: `User not verifed`,
                 previewUrl: user.previewUrl
             })
         }

@@ -8,13 +8,15 @@ class AuthModal extends Component {
 
         this.state = {
             loading: false,
-            error: null
+            error: null,
+            loginError: null,
+            registerError: null,
         };
     }
 
     onLoginSuccess(method, response) {
         console.log("logged successfully with " + method);
-        this.props.closeModal();
+        this.props.closeModal();        
     }
 
     onLoginFail(method, response) {
@@ -38,7 +40,9 @@ class AuthModal extends Component {
 
     afterTabsChange() {
         this.setState({
-            error: null
+            error: null,
+            loginError: null,
+            registerError: null
         });
     }
 
@@ -58,7 +62,8 @@ class AuthModal extends Component {
             let message = await this.props.login(email, password);
             if (message) {
                 this.setState({
-                    error: true
+                    error: true,
+                    loginError: message
                 })
             } else {
                 this.onLoginSuccess('form');
@@ -84,7 +89,8 @@ class AuthModal extends Component {
             let message = await this.props.register(nickname, email, password)
             if (message) {
                 this.setState({
-                    error: true
+                    error: true,
+                    registerError: message
                 })
             } else {
                 this.onLoginSuccess('form');
@@ -93,6 +99,7 @@ class AuthModal extends Component {
     }
 
     render() {
+        const { loginError, registerError } = this.state;
         return (
             <ReactModalLogin
                 visible={this.props.modalOpen}
@@ -103,10 +110,10 @@ class AuthModal extends Component {
                     afterChange: this.afterTabsChange.bind(this)
                 }}
                 loginError={{
-                    label: "Couldn't sign in, please try again."
+                    label: loginError || "Couldn't sign in, please try again."
                 }}
                 registerError={{
-                    label: "Couldn't sign up, please try again."
+                    label: registerError || "Couldn't sign up, please try again."
                 }}
                 startLoading={this.startLoading.bind(this)}
                 finishLoading={this.finishLoading.bind(this)}
