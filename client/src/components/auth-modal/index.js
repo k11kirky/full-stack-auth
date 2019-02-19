@@ -16,7 +16,7 @@ class AuthModal extends Component {
 
     onLoginSuccess(method, response) {
         console.log("logged successfully with " + method);
-        this.props.closeModal();        
+        this.props.closeModal();
     }
 
     onLoginFail(method, response) {
@@ -46,6 +46,12 @@ class AuthModal extends Component {
         });
     }
 
+    validateEmail(email) {
+        let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+
     async onLogin() {
         console.log('__onLogin__');
         console.log('email: ' + document.querySelector('#email').value);
@@ -54,9 +60,10 @@ class AuthModal extends Component {
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
 
-        if (!email || !password) {
+        if (!email || !password || !this.validateEmail(email)) {
             this.setState({
-                error: true
+                error: true,
+                loginError: "Invlaid fields - please try again"
             })
         } else {
             let message = await this.props.login(email, password);
@@ -81,9 +88,10 @@ class AuthModal extends Component {
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
 
-        if (!nickname || !email || !password) {
+        if (!nickname || !email || !password || !this.validateEmail(email)) {
             this.setState({
-                error: true
+                error: true,
+                registerError: "Invlaid fields - please try again"
             })
         } else {
             let message = await this.props.register(nickname, email, password)
