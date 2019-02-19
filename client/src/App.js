@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import AuthModal from './components/auth-modal';
 import './App.css';
 
 class App extends Component {
@@ -7,8 +7,7 @@ class App extends Component {
     return (
       <div className="app">
         <header className="app-body">
-          <div className="login-box">
-          </div>
+          <AuthModal/>
         </header>
       </div>
     );
