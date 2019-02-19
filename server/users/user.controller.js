@@ -19,7 +19,7 @@ function login(req, res, next) {
 function signUp(req, res, next) {
     userService.signUp(req.body)
         .then((message) => {
-            if (message.status == "success") {
+            if (message.message == "success") {
                 res.json(message)
             } else {
                 res.status(400).json({ message: "error" })
@@ -31,7 +31,7 @@ function signUp(req, res, next) {
 function verifyEmail(req, res, next) {
     userService.verifyEmail(req.body)
         .then((message) => {
-            if (message.status == "success") {
+            if (message.message == "success") {
                 res.json(message)
             } else {
                 res.status(400).json({ message: "error" })

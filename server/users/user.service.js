@@ -16,20 +16,21 @@ async function login({ email, password }) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
         if (!user.verifed) {
-            throw("user not verifed")
+            throw ("user not verifed")
         }
         const token = jwt.sign({ sub: user.id }, config.secret);
         const { password, ...userWithoutPassword } = user;
         return {
+            message: "success",
             ...userWithoutPassword,
             token
         };
     } else {
-        throw("no user found")
+        throw ("no user found")
     }
 }
 
-async function signUp({ email, password }) {
+async function signUp({ nickname, email, password }) {
     if (!email || !password) {
         // we know they have by-passed front end security
         throw ("Please sign up through our web application");
@@ -38,11 +39,12 @@ async function signUp({ email, password }) {
     hashedEmail = md5(email)
     users.push({
         id: hashedEmail,
+        nickname,
         email,
         password: md5(password),
         verifed: false
     });
-    
+
     // Generate test SMTP service account from ethereal.email
     const account = await nodemailer.createTestAccount();
 
@@ -59,7 +61,7 @@ async function signUp({ email, password }) {
 
     const mailOptions = {
         from: '"Peter Kirkham" <me@fakeemail.com>', // sender address
-        to: email, 
+        to: email,
         subject: "Verify your email", // Subject line
         text: `http://localhost:4000/users?id=${hashedEmail}`
     };
@@ -70,7 +72,7 @@ async function signUp({ email, password }) {
     console.log(users)
 
     return {
-        status: "success",
+        message: "success",
         messageId: info.messageId,
         previewUrl: nodemailer.getTestMessageUrl(info)
     };
@@ -81,9 +83,9 @@ async function verifyEmail({ id }) {
     if (user) {
         user.verifed = true
         return {
-            status: "success"
+            message: "success"
         };
     } else {
-       throw("no user found")
+        throw ("no user found")
     }
 }

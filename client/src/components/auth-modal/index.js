@@ -7,27 +7,14 @@ class AuthModal extends Component {
         super(props);
 
         this.state = {
-            showModal: true,
             loading: false,
             error: null
         };
     }
 
-    openModal() {
-        this.setState({
-            showModal: true
-        });
-    }
-
-    closeModal() {
-        this.setState({
-            showModal: false,
-            error: null
-        });
-    }
-
     onLoginSuccess(method, response) {
         console.log("logged successfully with " + method);
+        this.props.closeModal();
     }
 
     onLoginFail(method, response) {
@@ -55,7 +42,7 @@ class AuthModal extends Component {
         });
     }
 
-    onLogin() {
+    async onLogin() {
         console.log('__onLogin__');
         console.log('email: ' + document.querySelector('#email').value);
         console.log('password: ' + document.querySelector('#password').value);
@@ -68,54 +55,48 @@ class AuthModal extends Component {
                 error: true
             })
         } else {
-            this.onLoginSuccess('form');
+            let message = await this.props.login(email, password);
+            if (message) {
+                this.setState({
+                    error: true
+                })
+            } else {
+                this.onLoginSuccess('form');
+            }
         }
     }
 
-    onRegister() {
+    async onRegister() {
         console.log('__onRegister__');
-        console.log('login: ' + document.querySelector('#login').value);
+        console.log('nickname: ' + document.querySelector('#nickname').value);
         console.log('email: ' + document.querySelector('#email').value);
         console.log('password: ' + document.querySelector('#password').value);
 
-        const login = document.querySelector('#login').value;
+        const nickname = document.querySelector('#nickname').value;
         const email = document.querySelector('#email').value;
         const password = document.querySelector('#password').value;
 
-        if (!login || !email || !password) {
+        if (!nickname || !email || !password) {
             this.setState({
                 error: true
             })
         } else {
-            this.onLoginSuccess('form');
-        }
-    }
-
-    onRecoverPassword() {
-        console.log('__onFotgottenPassword__');
-        console.log('email: ' + document.querySelector('#email').value);
-
-        const email = document.querySelector('#email').value;
-
-
-        if (!email) {
-            this.setState({
-                error: true,
-                recoverPasswordSuccess: false
-            })
-        } else {
-            this.setState({
-                error: null,
-                recoverPasswordSuccess: true
-            });
+            let message = await this.props.register(nickname, email, password)
+            if (message) {
+                this.setState({
+                    error: true
+                })
+            } else {
+                this.onLoginSuccess('form');
+            }
         }
     }
 
     render() {
         return (
             <ReactModalLogin
-                visible={this.state.showModal}
-                onCloseModal={this.closeModal.bind(this)}
+                visible={this.props.modalOpen}
+                onCloseModal={this.props.closeModal}
                 loading={this.state.loading}
                 error={this.state.error}
                 tabs={{
@@ -137,9 +118,6 @@ class AuthModal extends Component {
                     },
                     registerBtn: {
                         label: "Sign up"
-                    },
-                    recoverPasswordBtn: {
-                        label: "Send new password"
                     },
                     loginInputs: [
                         {
@@ -167,8 +145,8 @@ class AuthModal extends Component {
                             label: 'Nickname',
                             type: 'text',
                             inputClass: 'RML-form-control',
-                            id: 'login',
-                            name: 'login',
+                            id: 'nickname',
+                            name: 'nickname',
                             placeholder: 'Nickname',
                         },
                         {
