@@ -10,13 +10,16 @@ class App extends Component {
 
     this.state = {
       modalOpen: false,
-      user: undefined
+      user: undefined,
+      userNotVerified: false,
+      verificationUrl: undefined
     }
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
+    this.setVerificationUrl = this.setVerificationUrl.bind(this);
   }
 
   openModal() {
@@ -28,6 +31,12 @@ class App extends Component {
   closeModal() {
     this.setState({
       modalOpen: false
+    })
+  }
+
+  setVerificationUrl(url) {
+    this.setState({
+      verificationUrl: url
     })
   }
 
@@ -46,7 +55,12 @@ class App extends Component {
       let body = await response.json();
       console.log(body);
       if (body.message != "success") {
+        if (body.message == "user not verifed") {
+          this.setVerificationUrl(body.previewUrl)
+        }
         return body.message
+      } else {
+        this.setVerificationUrl(body.previewUrl)
       }
     })
   }
@@ -65,7 +79,8 @@ class App extends Component {
       let body = await response.json();
       if (body.message == "success") {
         this.setState({
-          user: body
+          user: body,
+          verificationUrl: undefined
         })
       } else {
         return body.message
@@ -74,7 +89,8 @@ class App extends Component {
   }
 
   render() {
-    const { user, modalOpen } = this.state;
+    const { user, modalOpen, verificationUrl } = this.state;
+    console.log(verificationUrl)
     return (
       <div className="app">
         <AuthModal
@@ -84,6 +100,12 @@ class App extends Component {
           login={this.login}
           register={this.register} />
         <header className="app-body">
+          {verificationUrl ?
+            (<div>
+              <p>
+                Thanks for registering, please go to the mock email account by copying the link:</p>
+              <input value={verificationUrl} />
+            </div>) : null}
           <h1>{user ? `Welcome ${user.nickname}` : "Please Log In"}</h1>
           <hr />
           {user ?

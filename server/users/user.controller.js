@@ -5,7 +5,7 @@ const userService = require('./user.service');
 // routes
 router.post('/login', login);
 router.post('/sign-up', signUp);
-router.post('/verify-email', verifyEmail);
+router.get('/verify-email', verifyEmail);
 router.get('/', (req, res, next) => res.json({ "you": "logged in" }));
 
 module.exports = router;
@@ -18,9 +18,9 @@ function login(req, res, next) {
 
 function signUp(req, res, next) {
     userService.signUp(req.body)
-        .then((message) => {
-            if (message.message == "success") {
-                res.json(message)
+        .then((body) => {
+            if (body.message == "success") {
+                res.json(body)
             } else {
                 res.status(400).json({ message: "error" })
             }
@@ -29,10 +29,10 @@ function signUp(req, res, next) {
 }
 
 function verifyEmail(req, res, next) {
-    userService.verifyEmail(req.body)
-        .then((message) => {
-            if (message.message == "success") {
-                res.json(message)
+    userService.verifyEmail(req.query)
+        .then((body) => {
+            if (body.message == "success") {
+                res.json(body)
             } else {
                 res.status(400).json({ message: "error" })
             }

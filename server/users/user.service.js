@@ -16,7 +16,10 @@ async function login({ email, password }) {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
         if (!user.verifed) {
-            throw ("user not verifed")
+            return ({
+                message: "user not verifed",
+                previewUrl: user.previewUrl
+            })
         }
         const token = jwt.sign({ sub: user.id }, config.secret);
         const { password, ...userWithoutPassword } = user;
@@ -36,15 +39,7 @@ async function signUp({ nickname, email, password }) {
         throw ("Please sign up through our web application");
     }
     // do validation
-    hashedEmail = md5(email)
-    users.push({
-        id: hashedEmail,
-        nickname,
-        email,
-        password: md5(password),
-        verifed: false
-    });
-
+    let hashedEmail = md5(email)
     // Generate test SMTP service account from ethereal.email
     const account = await nodemailer.createTestAccount();
 
@@ -63,14 +58,20 @@ async function signUp({ nickname, email, password }) {
         from: '"Peter Kirkham" <me@fakeemail.com>', // sender address
         to: email,
         subject: "Verify your email", // Subject line
-        text: `http://localhost:4000/users?id=${hashedEmail}`
+        text: `http://localhost:4000/users/verify-email?id=${hashedEmail}`
     };
 
     // send mail with defined transport object
     const info = await transporter.sendMail(mailOptions)
-
+    users.push({
+        id: hashedEmail,
+        nickname,
+        email,
+        password: md5(password),
+        verifed: false,
+        previewUrl: nodemailer.getTestMessageUrl(info)
+    });
     console.log(users)
-
     return {
         message: "success",
         messageId: info.messageId,
