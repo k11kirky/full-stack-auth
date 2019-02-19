@@ -13,12 +13,13 @@ This is currently working to the spec given, however with not much else. There w
 
 ToDos:
 
-Tests for backend
-Tests for all Front End
-Split front end into more components
-Add Redux
-Move components to a container and presentaional approach
-Make it look nice
+Improve error messages<br/>
+Tests for backend<br/>
+Tests for all Front End<br/>
+Split front end into more components<br/>
+Add Redux<br/>
+Move components to a container and presentaional approach<br/>
+Make it look nice<br/>
 
  ## Installation
 
@@ -44,3 +45,4 @@ go to (http://localhost:3000)
 
 the server is as (http://localhost:4000)
 
+Have a play thats about it.
