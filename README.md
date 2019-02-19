@@ -19,7 +19,8 @@ Tests for all Front End<br/>
 Split front end into more components<br/>
 Add Redux<br/>
 Move components to a container and presentaional approach<br/>
-Make it look nice<br/>
+Make it look nicer<br/>
+Refactor everything<br/>
 
  ## Installation
 

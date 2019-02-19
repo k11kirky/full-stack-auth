@@ -89,7 +89,8 @@ async function verifyEmail({ id }) {
     if (user) {
         user.verifed = true
         return {
-            message: "success"
+            message: "success",
+            body: `<h2>Thanks ${user.nickname} you are now VALIDATED!<br/>(you can now close this window)</h2>`
         };
     } else {
         throw ("no user found")

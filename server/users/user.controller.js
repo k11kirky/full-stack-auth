@@ -32,7 +32,7 @@ function verifyEmail(req, res, next) {
     userService.verifyEmail(req.query)
         .then((body) => {
             if (body.message == "success") {
-                res.json(body)
+                res.send(body.body)
             } else {
                 res.status(400).json({ message: "error" })
             }
